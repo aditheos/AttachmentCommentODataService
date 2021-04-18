@@ -7,6 +7,11 @@ SAP OData Service for Attachments and Comments
 
 The idea is to provide the reusable code to my fellow developers, in order to decrease the time to market for the applications consuming SAP OData Services.
 
+# Details of the System on which this Service was built 
+**SAP NW** 7.5 SP14
+
+**ECC 6.0** EHP8 SP12
+
 # Demo UI
 User interface is build using **SAPUI5** which integrates with backend using **OData Service**. 
 
