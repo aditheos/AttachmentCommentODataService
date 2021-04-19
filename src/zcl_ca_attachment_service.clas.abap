@@ -150,6 +150,24 @@ CLASS ZCL_CA_ATTACHMENT_SERVICE IMPLEMENTATION.
       ).
 
       er_entity = CORRESPONDING #( ls_note ).
+      IF NOT lt_messages IS INITIAL.
+        " Update Return Messages
+        io_message->add_messages_from_bapi(
+          EXPORTING
+            it_bapi_messages          = lt_messages      " Return parameter table
+            iv_entity_type            = iv_entity_name   " Entity type/name
+            it_key_tab                = it_key_tab       " Entity key as name-value pair
+            iv_add_to_response_header = abap_true        " Flag for adding or not the message to the response header
+        ).
+
+        READ TABLE lt_messages WITH KEY type = 'E' TRANSPORTING NO FIELDS.
+        IF sy-subrc EQ 0.
+          RAISE EXCEPTION TYPE /iwbep/cx_mgw_busi_exception
+            EXPORTING
+              textid            = zif_ca_attachment_service=>gc_comment_save_error
+              message_container = io_message.
+        ENDIF.
+      ENDIF.
     ENDIF.
   ENDMETHOD.
 
@@ -292,6 +310,24 @@ CLASS ZCL_CA_ATTACHMENT_SERVICE IMPLEMENTATION.
           es_attachment  = DATA(ls_attachment)
           et_messages    = DATA(lt_messages)    " Return Messages
       ).
+      IF NOT lt_messages IS INITIAL.
+        " Update Return Messages
+        io_message->add_messages_from_bapi(
+          EXPORTING
+            it_bapi_messages          = lt_messages      " Return parameter table
+            iv_entity_type            = iv_entity_name   " Entity type/name
+            it_key_tab                = it_key_tab       " Entity key as name-value pair
+            iv_add_to_response_header = abap_true        " Flag for adding or not the message to the response header
+        ).
+
+        READ TABLE lt_messages WITH KEY type = 'E' TRANSPORTING NO FIELDS.
+        IF sy-subrc EQ 0.
+          RAISE EXCEPTION TYPE /iwbep/cx_mgw_busi_exception
+            EXPORTING
+              textid            = zif_ca_attachment_service=>gc_attach_save_error
+              message_container = io_message.
+        ENDIF.
+      ENDIF.
     ENDIF.
     er_entity = CORRESPONDING #( ls_attachment ).
   ENDMETHOD.

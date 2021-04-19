@@ -45,6 +45,12 @@ CLASS ZCL_ZCA_GW_ATTACHMENT_DPC_EXT IMPLEMENTATION.
         IF NOT go_attach IS BOUND.
           go_attach = NEW zcl_ca_attachment_service( ).
         ENDIF.
+
+        " Get Message Container
+        CALL METHOD me->/iwbep/if_mgw_conv_srv_runtime~get_message_container
+        RECEIVING
+          ro_message_container = DATA(lo_mesg_cont).
+
         go_attach->create_attachment_stream(
           EXPORTING
             iv_entity_name          = iv_entity_name
@@ -55,6 +61,7 @@ CLASS ZCL_ZCA_GW_ATTACHMENT_DPC_EXT IMPLEMENTATION.
             it_navigation_path      = it_navigation_path         " table of navigation paths
             iv_slug                 = iv_slug
             io_tech_request_context = io_tech_request_context    " Request Details for Entity Create Operation
+            io_message              = lo_mesg_cont
           IMPORTING
             er_entity               = DATA(ls_entity)
         ).
@@ -216,6 +223,11 @@ CLASS ZCL_ZCA_GW_ATTACHMENT_DPC_EXT IMPLEMENTATION.
     IF NOT go_attach IS BOUND.
       go_attach = NEW zcl_ca_attachment_service( ).
     ENDIF.
+    " Get Message Container
+    CALL METHOD me->/iwbep/if_mgw_conv_srv_runtime~get_message_container
+      RECEIVING
+        ro_message_container = DATA(lo_mesg_cont).
+
     go_attach->commentset_create_entity(
       EXPORTING
         iv_entity_name          = iv_entity_name
@@ -225,6 +237,7 @@ CLASS ZCL_ZCA_GW_ATTACHMENT_DPC_EXT IMPLEMENTATION.
         io_tech_request_context = io_tech_request_context
         it_navigation_path      = it_navigation_path
         io_data_provider        = io_data_provider
+        io_message              = lo_mesg_cont
       IMPORTING
         er_entity               = DATA(ls_entity)
     ).
